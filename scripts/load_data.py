@@ -1,10 +1,9 @@
 import csv
-import os
 from soldhouseprices_app.models import house_transactions
 
 def run():
-    file  = open("./pp-2021_clean.csv");
-    file_read = csv.reader(file);
+    file  = open('scripts/pp-2021_clean.csv')
+    file_read = csv.reader(file)
     
     house_transactions.objects.all().delete()
 
