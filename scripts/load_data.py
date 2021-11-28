@@ -16,4 +16,4 @@ def run():
             zip_code = record[3].split(' ')[0]
             property_type = record[4]
 
-            house_transactions.objects.create(id =id, price = price, date = transaction_date, zip = zip_code, property_type = property_type)
+            house_transactions.objects.create(id =id, price = price, date = transaction_date, zipcode = zip_code, property_type = property_type)
