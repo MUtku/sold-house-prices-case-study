@@ -15,7 +15,7 @@ def transactionbins(request):
     zipcode_value = request.query_params.get('zip')
     date_value = date_time_obj
     try:
-        resultset = house_transactions.objects.filter(zipcode = zipcode_value, date__year = date_value.year(), date__month = date_value.month())
+        resultset = house_transactions.objects.filter(zipcode = zipcode_value, date__year = date_value.year, date__month = date_value.month)
         print(resultset)
     except Exception as e:
         print(e)
