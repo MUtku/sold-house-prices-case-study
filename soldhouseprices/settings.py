@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'soldhouseprices_app',
     'whitenoise.runserver_nostatic',
     'django_extensions',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
