@@ -29,4 +29,4 @@ def transactionbins(request):
         result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
-    return JsonResponse(result_obj)
+    return JsonResponse(result_obj, safe=False)
