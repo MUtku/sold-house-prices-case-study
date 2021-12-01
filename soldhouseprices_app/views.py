@@ -8,6 +8,7 @@ from soldhouseprices_app.models import house_transactions
 
 import numpy as np
 import json
+import calendar
 
 
 @api_view(['GET'])
@@ -46,13 +47,13 @@ def averagehouseprices(request):
         from_date_value = datetime.strptime(from_date_str, '%b %Y').date()  
         to_date_str = request.query_params.get('to')
         to_date_value = datetime.strptime(to_date_str, '%b %Y').date()
+        last_day_of_month = calendar.monthrange(to_date_value.year, to_date_value.month)[1]
+        to_date_value.day = last_day_of_month
         zipcode_value = request.query_params.get('zip')
 
         detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
-            date__year__gte = from_date_value.year, date__month__gte = from_date_value.month,
-                date__year__lte = to_date_value.year, date__month__lte = to_date_value.month,
-                    property_type = 'D').annotate(year = TruncYear('date')).values('year')\
-                        .annotate(month = TruncMonth('date')).values('month')\
+            date__range = [from_date_value, to_date_value], property_type = 'D')\
+                .annotate(month = TruncMonth('date')).values('month')\
                         .annotate(average_price = Avg('price')).values('month', 'year', 'average_price')
 
         print(detached_result_set)
