@@ -51,8 +51,9 @@ def averagehouseprices(request):
         detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
             date__year__gte = from_date_value.year, date__month__gte = from_date_value.month,
                 date__year__lte = to_date_value.year, date__month__lte = to_date_value.month,
-                    property_type = 'D').annotate(month = TruncMonth('date')).annotate(year = TruncYear('date'))\
-                        .values('month').annotate(average_price = Avg('price')).values('month', 'year', 'average_price')
+                    property_type = 'D').annotate(year = TruncYear('date')).values('year')\
+                        .annotate(month = TruncMonth('date')).values('month')\
+                        .annotate(average_price = Avg('price')).values('month', 'year', 'average_price')
 
         print(detached_result_set)
     except Exception as e:
