@@ -1,22 +1,31 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from django.http.response import JsonResponse
 from datetime import datetime
 from rest_framework.decorators import api_view
-
 from soldhouseprices_app.models import house_transactions
+
+import numpy as np
+import json
+
 
 @api_view(['GET'])
 def transactionbins(request):
-    transaction_obj = {}
+    result_obj ={}
+    bin_count = 8
+
     date_time_str = request.query_params.get('date')
-    date_time_obj = datetime.strptime(date_time_str, '%b %Y').date()
-        
+    date_value = datetime.strptime(date_time_str, '%b %Y').date()  
     zipcode_value = request.query_params.get('zip')
-    date_value = date_time_obj
+
     try:
-        resultset = house_transactions.objects.filter(zipcode = zipcode_value, date__year = date_value.year, date__month = date_value.month)
+        resultset = house_transactions.objects.filter(zipcode = zipcode_value,
+         date__year = date_value.year,
+          date__month = date_value.month).values('price')
         print(resultset)
+
+        histo, bin_edges = np.histogram(resultset, bin_count)
+
+        result_obj = {'histogram': histo, 'bin_edges': bin_edges}
+        result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
-    return JsonResponse(transaction_obj)
+    return JsonResponse(result_obj)
