@@ -49,7 +49,6 @@ def averagehouseprices(request):
         to_date_value = datetime.strptime(to_date_str, '%b %Y').date()
         last_day_of_month = calendar.monthrange(to_date_value.year, to_date_value.month)[1]
         to_date_value = datetime(to_date_value.year, to_date_value.month, last_day_of_month)
-        to_date_value.day = last_day_of_month
         zipcode_value = request.query_params.get('zip')
 
         detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
