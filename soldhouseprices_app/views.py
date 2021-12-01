@@ -25,7 +25,7 @@ def transactionbins(request):
 
         histo, bin_edges = np.histogram(price_list, bin_count)
 
-        result_obj = {'histogram': histo, 'bin_edges': bin_edges}
+        result_obj = {'histogram': histo.tolist(), 'bin_edges': bin_edges.tolist()}
         result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
