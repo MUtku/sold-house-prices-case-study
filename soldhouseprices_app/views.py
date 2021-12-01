@@ -17,15 +17,11 @@ def transactionbins(request):
     zipcode_value = request.query_params.get('zip')
 
     try:
-        result_set = list(house_transactions.objects.filter(zipcode = zipcode_value,
+        result_set = house_transactions.objects.filter(zipcode = zipcode_value,
          date__year = date_value.year,
-          date__month = date_value.month).values('price'))
+          date__month = date_value.month).values('price')
 
-        print(f'result set: {result_set}')
-
-        price_list = [element for element in result_set]
-
-        print(f'price list: {price_list}')
+        price_list = [element['price'] for element in result_set]
 
         histo, bin_edges = np.histogram(price_list, bin_count)
 
