@@ -1,7 +1,7 @@
 from django.db.models.functions.datetime import TruncYear
 from django.http.response import JsonResponse
 from django.db.models.aggregates import Avg
-from django.db.models.functions import TruncMonth, TruncYear
+from django.db.models.functions import Trunc, TruncMonth, TruncYear
 from datetime import datetime
 from rest_framework.decorators import api_view
 from soldhouseprices_app.models import house_transactions
@@ -53,7 +53,7 @@ def averagehouseprices(request):
 
         detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
             date__range = [from_date_value, to_date_value], property_type = 'D')\
-                .annotate(month = TruncMonth('date')).values('month')\
+                .annotate(month = Trunc('date')).values('month')\
                         .annotate(average_price = Avg('price')).values('month', 'average_price')
 
         print(detached_result_set)
