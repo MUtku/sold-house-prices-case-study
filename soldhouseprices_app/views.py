@@ -85,4 +85,4 @@ def averagehouseprices(request):
     except Exception as e:
         print(e)
 
-    return JsonResponse(result_obj)
+    return JsonResponse(result_obj, safe = False)
