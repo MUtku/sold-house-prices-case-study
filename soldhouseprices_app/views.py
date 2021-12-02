@@ -16,7 +16,7 @@ def defaultjsonserializer(obj):
 
 @api_view(['GET'])
 def transactionbins(request):
-    result_obj = {}
+    result_obj ={}
     bin_count = 8
 
     try:
@@ -35,14 +35,12 @@ def transactionbins(request):
         # Generate histogram and bin edges
         histo, bin_edges = np.histogram(price_list, bin_count)
 
-        result_obj = {'histogram': [], 'bin_edges': []}
-        result_obj['histogram'] = histo.tolist()
-        result_obj['bin_edges'] = bin_edges.tolist()
+        result_obj = {'histogram': histo.tolist(), 'bin_edges': bin_edges.tolist()}
         result_obj = json.dumps(result_obj, default = defaultjsonserializer)
     except Exception as e:
         print(e)
 
-    return JsonResponse(result_obj)
+    return JsonResponse(result_obj, safe=False)
 
 @api_view(['GET'])
 def averagehouseprices(request):
