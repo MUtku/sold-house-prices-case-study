@@ -30,7 +30,7 @@ def transactionbins(request):
 
         histo, bin_edges = np.histogram(price_list, bin_count)
 
-        result_obj = {'histogram': histo.tolist(), 'bin_edges': bin_edges.tolist()}
+        result_obj = {'histogram': list(histo), 'bin_edges': list(bin_edges)}
         result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
@@ -51,31 +51,38 @@ def averagehouseprices(request):
         to_date_value = datetime(to_date_value.year, to_date_value.month, last_day_of_month)
         zipcode_value = request.query_params.get('zip')
 
-        detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
-            date__range = [from_date_value, to_date_value], property_type = 'D')\
+        result_set = house_transactions.objects.filter(zipcode = zipcode_value,
+            date__range = [from_date_value, to_date_value])\
                 .annotate(month = TruncMonth('date')).values('month')\
-                        .annotate(average_price = Avg('price')).values('month', 'average_price')
+                        .annotate(average_price = Avg('price')).values('property_type', 'month', 'average_price')
 
-        semi_detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
-            date__range = [from_date_value, to_date_value], property_type = 'S')\
-                .annotate(month = TruncMonth('date')).values('month')\
-                        .annotate(average_price = Avg('price')).values('month', 'average_price')
-
-        terraced_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
-            date__range = [from_date_value, to_date_value], property_type = 'T')\
-                .annotate(month = TruncMonth('date')).values('month')\
-                        .annotate(average_price = Avg('price')).values('month', 'average_price')
-
-        flats_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
-            date__range = [from_date_value, to_date_value], property_type = 'F')\
-                .annotate(month = TruncMonth('date')).values('month')\
-                        .annotate(average_price = Avg('price')).values('month', 'average_price')
-
-        result_obj = {'detached': list(detached_result_set), 
-                        'semi_detached': list(semi_detached_result_set),
-                        'terraced': list(terraced_result_set),
-                        'flats': list(flats_result_set)}
+        result_obj = {list(result_set)}
         result_obj = json.dumps(result_obj)
+        # detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
+        #     date__range = [from_date_value, to_date_value], property_type = 'D')\
+        #         .annotate(month = TruncMonth('date')).values('month')\
+        #                 .annotate(average_price = Avg('price')).values('month', 'average_price')
+
+        # semi_detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
+        #     date__range = [from_date_value, to_date_value], property_type = 'S')\
+        #         .annotate(month = TruncMonth('date')).values('month')\
+        #                 .annotate(average_price = Avg('price')).values('month', 'average_price')
+
+        # terraced_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
+        #     date__range = [from_date_value, to_date_value], property_type = 'T')\
+        #         .annotate(month = TruncMonth('date')).values('month')\
+        #                 .annotate(average_price = Avg('price')).values('month', 'average_price')
+
+        # flats_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
+        #     date__range = [from_date_value, to_date_value], property_type = 'F')\
+        #         .annotate(month = TruncMonth('date')).values('month')\
+        #                 .annotate(average_price = Avg('price')).values('month', 'average_price')
+
+        # result_obj = {'detached': list(detached_result_set), 
+        #                 'semi_detached': list(semi_detached_result_set),
+        #                 'terraced': list(terraced_result_set),
+        #                 'flats': list(flats_result_set)}
+        # result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
     return JsonResponse(result_obj)
