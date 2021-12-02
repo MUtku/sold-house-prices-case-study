@@ -41,8 +41,8 @@ def transactionbins(request):
         result_obj = json.dumps(result_obj, default = defaultjsonserializer)
     except Exception as e:
         print(e)
-        
-    return JsonResponse(result_obj, safe=False)
+
+    return JsonResponse(result_obj)
 
 @api_view(['GET'])
 def averagehouseprices(request):
