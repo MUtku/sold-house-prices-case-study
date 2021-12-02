@@ -30,7 +30,7 @@ def transactionbins(request):
 
         histo, bin_edges = np.histogram(price_list, bin_count)
 
-        result_obj = {'histogram': list(histo), 'bin_edges': list(bin_edges)}
+        result_obj = {'histogram': histo.tolist(), 'bin_edges': bin_edges.tolist()}
         result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
@@ -56,7 +56,7 @@ def averagehouseprices(request):
                 .annotate(month = TruncMonth('date')).values('month')\
                         .annotate(average_price = Avg('price')).values('property_type', 'month', 'average_price')
 
-        result_obj = {list(result_set)}
+        result_obj = {'average_prices_per_month':list(result_set)}
         result_obj = json.dumps(result_obj)
         # detached_result_set = house_transactions.objects.filter(zipcode = zipcode_value,
         #     date__range = [from_date_value, to_date_value], property_type = 'D')\
