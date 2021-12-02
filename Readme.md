@@ -97,7 +97,28 @@ In the above example we are requesting data for:
 and in return we will be getting a JSON Response from the House Transactions API like the below:
 
 ```json
-"{\"histogram\": [2, 0, 0, 0, 1, 0, 0, 1], \"bin_edges\": [119950.0, 127706.25, 135462.5, 143218.75, 150975.0, 158731.25, 166487.5, 174243.75, 182000.0]}"
+{
+	"histogram":  [
+		2,
+		0,
+		0,
+		0,
+		1,
+		0,
+		0,
+		1
+	],
+	"bin_edges":  [
+		119950.0,
+		127706.25,
+		135462.5,
+		143218.75,
+		150975.0,
+		158731.25,
+		166487.5,
+		174243.75,
+		182000.0
+	]
+}
 ```
-
 In the JSON Response, API returns **frequencies** for each bin of the histogram and **bin edges** that represent ending point of each histogram bin as lists. If there are no matches for a given bin, corresponding frequency would be returned as 0. 
