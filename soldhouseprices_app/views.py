@@ -9,11 +9,6 @@ import numpy as np
 import json
 import calendar
 
-# Converter to use for non-serializable json objects
-def defaultjsonserializer(obj):
-    if isinstance(obj, datetime):
-        return obj.__str__()
-
 @api_view(['GET'])
 def transactionbins(request):
     result_obj ={}
@@ -36,7 +31,7 @@ def transactionbins(request):
         histo, bin_edges = np.histogram(price_list, bin_count)
 
         result_obj = {'histogram': histo.tolist(), 'bin_edges': bin_edges.tolist()}
-        result_obj = json.dumps(result_obj, default = defaultjsonserializer)
+        # result_obj = json.dumps(result_obj)
     except Exception as e:
         print(e)
 
